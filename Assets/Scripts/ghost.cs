@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ghost : MonoBehaviour {
 
@@ -11,7 +12,12 @@ public class ghost : MonoBehaviour {
 
     private float speed, lifespan;
 
+    public Transform target;
+    private NavMeshAgent agent;
+
     void Start () {
+        agent = gameObject.GetComponent<NavMeshAgent>();
+
         rb = gameObject.GetComponent<Rigidbody>();
         speed = Random.Range(1f, 2f);
 
@@ -21,9 +27,12 @@ public class ghost : MonoBehaviour {
 
     void Update () {
         //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        Vector3 movement = new Vector3(10f, 0.0f, 10f);
+        //Vector3 movement = new Vector3(10f, 0.0f, 10f);
 
-        rb.AddForce(movement * speed);
+        //rb.AddForce(movement * speed);
+
+        agent.destination = target.position;
+
     }
 
     private void OnTriggerEnter(Collider other)

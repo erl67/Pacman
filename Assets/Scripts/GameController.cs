@@ -13,6 +13,13 @@ public class GameController : MonoBehaviour {
     private AudioSource background;
 
     private float volume, timer, timer2;
+    private float xOffset = 0f, yOffset = 0f, zOffset = 0f;
+
+
+    public Maze mazePrefab;
+
+    private Maze mazeInstance;
+
 
     private void Awake()
     {
@@ -28,6 +35,15 @@ public class GameController : MonoBehaviour {
     }
 
     void Start () {
+        BeginGame();
+    }
+
+    private void BeginGame()
+    {
+        Debug.Log("Beginning Game");
+        mazeInstance = Instantiate(mazePrefab) as Maze;
+        StartCoroutine(mazeInstance.Generate());
+
     }
 
     void Update () {
@@ -100,8 +116,12 @@ public class GameController : MonoBehaviour {
         
         if (spawn && spawnGhost)
         {
-            Vector3 spawnOffset = new Vector3(Random.Range(5f, -5f), Random.Range(5f, -5f), Random.Range(5f, -5f));
-            var enemy = (GameObject)Instantiate(ghostPrefab, transform.position + spawnOffset, transform.rotation);
+            xOffset = Random.Range(5f, -5f);
+            zOffset = Random.Range(5f, -5f);
+            //yOffset = Random.Range(5f, -5f);
+
+            Vector3 spawnOffset = new Vector3(xOffset, 0f, zOffset);
+            //var enemy = (GameObject)Instantiate(ghostPrefab, transform.position + spawnOffset, transform.rotation);
             spawnGhost = false;
         }
 
@@ -119,6 +139,9 @@ public class GameController : MonoBehaviour {
 
     public void PlayerDead()
     {
+        StopAllCoroutines();
+        Destroy(mazeInstance.gameObject);
+
         MuteBG();
         spawn = false;
         gameOver = true;

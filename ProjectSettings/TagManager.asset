@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - ghost
+  - maze
+  - enemy
+  - dot
+  - fruit
+  - mazecell
   layers:
   - Default
   - TransparentFX
