@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             PlayerDead();
-            UnityEditor.EditorApplication.isPlaying = false;  //hide for build
+            //UnityEditor.EditorApplication.isPlaying = false;  //hide for build
             Application.Quit();
         }
 
