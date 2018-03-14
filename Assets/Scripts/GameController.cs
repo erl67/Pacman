@@ -42,8 +42,8 @@ public class GameController : MonoBehaviour {
     {
         Debug.Log("Beginning Game");
         mazeInstance = Instantiate(mazePrefab) as Maze;
-        StartCoroutine(mazeInstance.Generate());
-
+        //StartCoroutine(mazeInstance.Generate());
+        mazeInstance.Generate();
     }
 
     void Update () {

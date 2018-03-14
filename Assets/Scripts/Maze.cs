@@ -35,20 +35,34 @@ public class Maze : MonoBehaviour
         return cells[coordinates.x, coordinates.z];
     }
 
-    public IEnumerator Generate()
+    //public IEnumerator Generate()
+    //{
+    //    //WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
+    //    cells = new MazeCell[size.x, size.z];
+    //    List<MazeCell> activeCells = new List<MazeCell>();
+    //    DoFirstGenerationStep(activeCells);
+    //    while (activeCells.Count > 0)
+    //    {
+    //        //yield return delay;
+    //        yield return 0f;
+    //        DoNextGenerationStep(activeCells);
+    //    }
+    //}
+
+    public void Generate()
     {
-        WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
+        //WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
         cells = new MazeCell[size.x, size.z];
         List<MazeCell> activeCells = new List<MazeCell>();
         DoFirstGenerationStep(activeCells);
         while (activeCells.Count > 0)
         {
-            yield return delay;
+            //yield return delay;
+            //yield return 0f;
             DoNextGenerationStep(activeCells);
         }
     }
-
-    private void DoFirstGenerationStep(List<MazeCell> activeCells)
+        private void DoFirstGenerationStep(List<MazeCell> activeCells)
     {
         activeCells.Add(CreateCell(RandomCoordinates));
     }

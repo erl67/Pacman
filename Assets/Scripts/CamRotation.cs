@@ -10,13 +10,13 @@ public class CamRotation : MonoBehaviour
 
     void Update()
     {
-        y = Input.GetAxis("Mouse X");
-        x = Input.GetAxis("Mouse Y");
+        //y = Input.GetAxis("Mouse X");
+        //x = Input.GetAxis("Mouse Y");
         moveH = Input.GetAxis("Horizontal");
         moveV = Input.GetAxis("Vertical");
 
-        rotateValue = new Vector3(x, y * -1, 0);
-        transform.eulerAngles = transform.eulerAngles - rotateValue;
+        //rotateValue = new Vector3(x, y * -1, 0);
+        //transform.eulerAngles = transform.eulerAngles - rotateValue;
 
         rotateValue = new Vector3(moveV, moveH * -1, 0);
         transform.eulerAngles = transform.eulerAngles - rotateValue;

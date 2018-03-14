@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour {
 
     void Update () {
 
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        rb.AddForce(new Vector3(h, 0f, v));
+
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
