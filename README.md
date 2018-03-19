@@ -2,13 +2,16 @@
 
 Made in Unity 3D
 
-Background:
+# Background:
 
 Eat the things
 
-Controls:
 
-Movement – WASD, Arrow Keys, or Mouse Movement (Mouse is preferred)
+# Controls:
+
+Movement – Mouse click to move player
+
+Camera - WASD, Arrow Keys
 
 P – Pause
 

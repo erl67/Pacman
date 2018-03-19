@@ -15,9 +15,7 @@ public class GameController : MonoBehaviour {
     private float volume, timer, timer2;
     private float xOffset = 0f, yOffset = 0f, zOffset = 0f;
 
-
     public Maze mazePrefab;
-
     private Maze mazeInstance;
 
 
@@ -35,6 +33,8 @@ public class GameController : MonoBehaviour {
     }
 
     void Start () {
+        //Time.timeScale = 0;
+
         BeginGame();
     }
 
@@ -43,7 +43,14 @@ public class GameController : MonoBehaviour {
         Debug.Log("Beginning Game");
         mazeInstance = Instantiate(mazePrefab) as Maze;
         //StartCoroutine(mazeInstance.Generate());
+
         mazeInstance.Generate();
+        Debug.Log("Maze Generated - GC");
+
+        var ghost1 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
+        //var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(-10f, 0, -10f), transform.rotation);
+
+
     }
 
     void Update () {
@@ -140,7 +147,7 @@ public class GameController : MonoBehaviour {
     public void PlayerDead()
     {
         StopAllCoroutines();
-        Destroy(mazeInstance.gameObject);
+        //Destroy(mazeInstance.gameObject);
 
         MuteBG();
         spawn = false;

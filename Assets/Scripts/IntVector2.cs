@@ -5,7 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public struct IntVector2
 {
-
     public int x, z;
 
     public IntVector2(int x, int z)
@@ -20,7 +19,5 @@ public struct IntVector2
         a.z += b.z;
         return a;
     }
-
-
 }
 

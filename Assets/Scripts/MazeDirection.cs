@@ -10,7 +10,6 @@ public enum MazeDirection
 
 public static class MazeDirections
 {
-
     public const int Count = 4;
 
     public static MazeDirection RandomValue

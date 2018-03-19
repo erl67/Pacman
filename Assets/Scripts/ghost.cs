@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class ghost : MonoBehaviour {
 
-    public GameObject body;
-    public GameObject mouth;
-    public GameObject head;
+    //public GameObject body;
+    //public GameObject mouth;
+    //public GameObject head;
     private Rigidbody rb;
 
     private float speed, lifespan;
@@ -19,20 +19,15 @@ public class ghost : MonoBehaviour {
         agent = gameObject.GetComponent<NavMeshAgent>();
 
         rb = gameObject.GetComponent<Rigidbody>();
-        speed = Random.Range(1f, 2f);
+        speed = Random.Range(1f, 3f);
 
-        rb.transform.localScale *= Random.Range(.1f, 2f);
+        rb.transform.localScale *= Random.Range(.9f, 1.1f);
+        //gameObject.GetComponent<MeshRenderer>().material.color = new Color(0f, 0f, Random.Range(0f,1f), 1);
 
     }
 
-    void Update () {
-        //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        //Vector3 movement = new Vector3(10f, 0.0f, 10f);
-
-        //rb.AddForce(movement * speed);
-
+    void FixedUpdate () {
         agent.destination = target.position;
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -41,7 +36,7 @@ public class ghost : MonoBehaviour {
 
         if (other.tag.Equals("player"))
         {
-            GhostDies();
+            //GhostDies();
         }
     }
 

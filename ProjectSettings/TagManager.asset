@@ -10,6 +10,12 @@ TagManager:
   - dot
   - fruit
   - mazecell
+  - mazewall
+  - mazepassage
+  - mazequad
+  - floor
+  - ExtWall
+  - tree
   layers:
   - Default
   - TransparentFX

@@ -16,7 +16,6 @@ public class Maze : MonoBehaviour
     public MazePassage passagePrefab;
     public MazeWall wallPrefab;
 
-
     public IntVector2 RandomCoordinates
     {
         get
@@ -35,21 +34,8 @@ public class Maze : MonoBehaviour
         return cells[coordinates.x, coordinates.z];
     }
 
-    //public IEnumerator Generate()
-    //{
-    //    //WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
-    //    cells = new MazeCell[size.x, size.z];
-    //    List<MazeCell> activeCells = new List<MazeCell>();
-    //    DoFirstGenerationStep(activeCells);
-    //    while (activeCells.Count > 0)
-    //    {
-    //        //yield return delay;
-    //        yield return 0f;
-    //        DoNextGenerationStep(activeCells);
-    //    }
-    //}
-
     public void Generate()
+    //public IEnumerator Generate()
     {
         //WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
         cells = new MazeCell[size.x, size.z];
@@ -61,8 +47,10 @@ public class Maze : MonoBehaviour
             //yield return 0f;
             DoNextGenerationStep(activeCells);
         }
+        Debug.Log("Maze Complete, resuming time");
     }
-        private void DoFirstGenerationStep(List<MazeCell> activeCells)
+
+    private void DoFirstGenerationStep(List<MazeCell> activeCells)
     {
         activeCells.Add(CreateCell(RandomCoordinates));
     }
@@ -127,13 +115,7 @@ public class Maze : MonoBehaviour
         newCell.name = "Maze Cell " + coordinates.x + ", " + coordinates.z;
         newCell.transform.parent = transform;
         newCell.transform.localPosition =
-            new Vector3(coordinates.x - size.x * 0.5f + 0.5f, -.5f, coordinates.z - size.z * 0.5f + 0.5f);
+        new Vector3(coordinates.x - size.x * 0.5f + 0.5f, -.5f, coordinates.z - size.z * 0.5f + 0.5f);
         return newCell;
     }
-
-    void Start()
-    {
-        Debug.Log("Creating Maze");
-    }
-
 }
