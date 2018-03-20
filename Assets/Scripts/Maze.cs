@@ -42,7 +42,7 @@ public class Maze : MonoBehaviour
         while (activeCells.Count > 0)
         {
             //yield return delay;
-            //yield return 0f;
+            //yield return null;
             DoNextGenerationStep(activeCells);
         }
         Debug.Log("Maze Complete, resuming time");

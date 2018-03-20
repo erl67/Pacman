@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour {
     public int ghostCount;
 
     public GameObject[] dots;
+    public GameObject[] walls;
 
     private AudioSource background;
 
@@ -49,6 +50,8 @@ public class GameController : MonoBehaviour {
     {
         mazeInstance = Instantiate(mazePrefab) as Maze;
         mazeInstance.Generate();
+        background = GetComponents<AudioSource>()[0];
+
         Debug.Log("Beginning Game");
 
         //StartCoroutine(mazeInstance.Generate());
@@ -65,9 +68,19 @@ public class GameController : MonoBehaviour {
             deletedot = deletedot == true ? false : true;
         }
 
+        walls = GameObject.FindGameObjectsWithTag("mazewall");
+        foreach (GameObject wall in walls)
+        {
+            Debug.Log(wall.transform.position);
+        }
+
+
 
         var ghost1 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
-        var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(-10f, 0, -10f), transform.rotation);
+        var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, -18f), transform.rotation);
+        var ghost3 = (GameObject)Instantiate(ghostPrefab, new Vector3(-18f, 0, 18f), transform.rotation);
+        var ghost4 = (GameObject)Instantiate(ghostPrefab, new Vector3(-18f, 0, -18f), transform.rotation);
+
     }
 
     private IEnumerator StartBox()
@@ -79,6 +92,7 @@ public class GameController : MonoBehaviour {
         }
         txtHelp.text = "";
         txtCenter.text = "";
+        background.Play();
         Time.timeScale = 1;
     }
 
@@ -97,7 +111,7 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             PlayerDead();
-            //UnityEditor.EditorApplication.isPlaying = false;  //hide for build
+            UnityEditor.EditorApplication.isPlaying = false;  //hide for build
             Application.Quit();
         }
 
@@ -146,12 +160,8 @@ public class GameController : MonoBehaviour {
             if (ghostCount < 10) {
                 xOffset = Random.Range(-20f, 20f);
                 zOffset = Random.Range(-20f, 20f);
-                //yOffset = Random.Range(5f, -5f);
                 var ghostX = (GameObject)Instantiate(ghostPrefab, new Vector3(xOffset, 0, zOffset), transform.rotation);
             }
-
-
-            Vector3 spawnOffset = new Vector3(xOffset, 0f, zOffset);
             spawnGhost = false;
         }
 

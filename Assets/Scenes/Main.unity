@@ -869,7 +869,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1001806656
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,13 +1197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab4ea2d68387b2499cf822df75d916f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  speed: 0
-  lifespan: 0
-  target: {fileID: 133306135}
-  agent: {fileID: 0}
-  mr: {fileID: 0}
-  tree: {fileID: 0}
 --- !u!136 &1319753793
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1731,6 +1724,7 @@ MonoBehaviour:
   ghostPrefab: {fileID: 178023632}
   ghostCount: 0
   dots: []
+  walls: []
   mazePrefab: {fileID: 1609755538}
   txtCenter: {fileID: 1506010197}
   txtHelp: {fileID: 1101832660}
