@@ -3,30 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ghost : MonoBehaviour {
-
-    //public GameObject body;
-    //public GameObject mouth;
-    //public GameObject head;
+public class GhostController : MonoBehaviour
+{
     private Rigidbody rb;
 
     private float speed, lifespan;
 
     public Transform target;
     private NavMeshAgent agent;
+    private MeshRenderer mr;
+    private Tree tree;
 
-    void Start () {
+    void Start()
+    {
         agent = gameObject.GetComponent<NavMeshAgent>();
-
         rb = gameObject.GetComponent<Rigidbody>();
-        speed = Random.Range(1f, 3f);
+        //mr = gameObject.GetComponent<MeshRenderer>();
+        //mr = gameObject.GetComponent<Tree>().GetComponent<MeshRenderer>();
+
+        //tree = gameObject.GetComponent<Tree>();
+
 
         rb.transform.localScale *= Random.Range(.9f, 1.1f);
+        agent.speed = Random.Range(3f, 10f);
+        //mr.material.color = Color.red;
         //gameObject.GetComponent<MeshRenderer>().material.color = new Color(0f, 0f, Random.Range(0f,1f), 1);
 
     }
 
-    void FixedUpdate () {
+    void FixedUpdate()
+    {
         agent.destination = target.position;
     }
 

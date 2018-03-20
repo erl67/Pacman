@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
     public static GameController instance;
     public bool gameOver;
-    public bool spawn = true, spawnGhost = false;
+    public bool spawnGhost = false;
 
     public GameObject ghostPrefab;
+    public int ghostCount;
+
+    public GameObject[] dots;
 
     private AudioSource background;
 
@@ -17,6 +21,8 @@ public class GameController : MonoBehaviour {
 
     public Maze mazePrefab;
     private Maze mazeInstance;
+
+    public Text txtCenter, txtHelp;
 
 
     private void Awake()
@@ -33,24 +39,47 @@ public class GameController : MonoBehaviour {
     }
 
     void Start () {
-        //Time.timeScale = 0;
-
+        Time.timeScale = 0;
+        txtCenter.text = "Press any Key to Begin";
+        StartCoroutine(StartBox());
         BeginGame();
     }
 
     private void BeginGame()
     {
-        Debug.Log("Beginning Game");
         mazeInstance = Instantiate(mazePrefab) as Maze;
+        mazeInstance.Generate();
+        Debug.Log("Beginning Game");
+
         //StartCoroutine(mazeInstance.Generate());
 
-        mazeInstance.Generate();
-        Debug.Log("Maze Generated - GC");
+        dots = GameObject.FindGameObjectsWithTag("dot");
+
+        bool deletedot = false; //reduce number of dots
+        foreach (GameObject dot in dots)
+        {
+            if (deletedot == true)
+            {
+                Destroy(dot);
+            }
+            deletedot = deletedot == true ? false : true;
+        }
+
 
         var ghost1 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
-        //var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(-10f, 0, -10f), transform.rotation);
+        var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(-10f, 0, -10f), transform.rotation);
+    }
 
-
+    private IEnumerator StartBox()
+    {
+        txtCenter.text = "Press any Key to Begin";
+        while (!Input.anyKey)
+        {
+            yield return null;
+        }
+        txtHelp.text = "";
+        txtCenter.text = "";
+        Time.timeScale = 1;
     }
 
     void Update () {
@@ -76,7 +105,7 @@ public class GameController : MonoBehaviour {
         {
             volume = Time.timeScale == 1 ? AudioListener.volume : volume;
             Time.timeScale = Time.timeScale == 1 ? 0 : 1;
-            spawn = spawn == true ? false : true;
+            spawnGhost = spawnGhost == true ? false : true;
             AudioListener.volume = Time.timeScale == 0 ? 0f : volume; 
         }
 
@@ -97,31 +126,34 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            //Time.timeScale = 1;
         }
 
 
-        //if (timer < Time.time)
-        //{
-        //    timer = Time.time + Random.Range(1f, 3f);
-        //    spawnGhost = true;
-        //}
+        if (timer < Time.time)
+        {
+            timer = Time.time + Random.Range(3f, 5f);
+            spawnGhost = true;
+        }
 
         //if (timer2 < Time.time)
         //{
         //    timer2 = Time.time + Random.Range(2f, 4f);
         //}
-        
-        //if (spawn && spawnGhost)
-        //{
-        //    xOffset = Random.Range(5f, -5f);
-        //    zOffset = Random.Range(5f, -5f);
-        //    //yOffset = Random.Range(5f, -5f);
 
-        //    Vector3 spawnOffset = new Vector3(xOffset, 0f, zOffset);
-        //    //var enemy = (GameObject)Instantiate(ghostPrefab, transform.position + spawnOffset, transform.rotation);
-        //    spawnGhost = false;
-        //}
+        if (spawnGhost)
+        {
+            ghostCount = GameObject.FindGameObjectsWithTag("ghost").Length;
+            if (ghostCount < 10) {
+                xOffset = Random.Range(-20f, 20f);
+                zOffset = Random.Range(-20f, 20f);
+                //yOffset = Random.Range(5f, -5f);
+                var ghostX = (GameObject)Instantiate(ghostPrefab, new Vector3(xOffset, 0, zOffset), transform.rotation);
+            }
+
+
+            Vector3 spawnOffset = new Vector3(xOffset, 0f, zOffset);
+            spawnGhost = false;
+        }
 
     }
 
@@ -137,11 +169,11 @@ public class GameController : MonoBehaviour {
 
     public void PlayerDead()
     {
-        //StopAllCoroutines();
+        StopAllCoroutines();
         //Destroy(mazeInstance.gameObject);
 
         MuteBG();
-        spawn = false;
+        spawnGhost = false;
         gameOver = true;
     }
 

@@ -9,27 +9,25 @@ public class PlayerController : MonoBehaviour {
     private Transform target;
     private NavMeshAgent agent;
 
-    Ray ray;
     RaycastHit hit;
 
     private int score = 0, lives = 3;
     public Text txtScore;
     public Text txtLives;
-    public Text txtCenter;
+    public AudioSource eatPill;
 
     void Start () {
         agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
         txtLives.text = "Lives: " + lives;
-        txtScore.text += score;
+        txtScore.text = "Score: " + score;
+        eatPill = GetComponents<AudioSource>()[0];
     }
 
     void Update () {
-
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            transform.position = transform.position + new Vector3(2f, 2f, 0f);
+            transform.position = transform.position + new Vector3(1f, 0f, 2f);
             Debug.Log("Pacman " + gameObject.transform.position.ToString());
         }
 
@@ -37,25 +35,10 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-            //Debug.Log("Mouse Down");
-            //Debug.Log(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100));
-            //Debug.Log(Physics.Raycast(transform.localPosition, out hit, Mathf.Infinity));
-
-            //Debug.DrawRay(transform.position, Input.mousePosition - transform.position);
-
-
-            //ray.origin = transform.position;
-            //ray.direction = transform.position + Input.mousePosition;
-
-            //RaycastHit hit;
-            //Ray.
-
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
-                txtCenter.text = "";
                 agent.destination = hit.point;
                 Debug.Log("Pacman moving to " + agent.destination);
-
             }
         }
 
@@ -83,16 +66,22 @@ public class PlayerController : MonoBehaviour {
             rb.velocity = Vector3.zero;
             rb.AddForce(new Vector3(50f, 0f, 0f));
         }
-        score--;
-        txtScore.text = "Score: " + score;
+        lives--;
+        txtLives.text = "Lives: " + lives;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Player collision " + other.tag);
 
+        if (other.tag.Equals("mazewall"))
+        {
+            agent.destination = Vector3.zero;
+        }
+
         if (other.tag.Equals("dot"))
         {
+            eatPill.Play();
             Destroy(other.gameObject);
             score++;
             txtScore.text = "Score: " + score;        
@@ -101,8 +90,9 @@ public class PlayerController : MonoBehaviour {
         if (other.tag.Equals("ghost"))
         {
             //GameController.instance.MuteBG();
-            txtCenter.text = "Game Over\nYour Final Score is: " + score.ToString();
-            txtCenter.text += "\nPress (r) to continue";
+            //txtCenter.text = "Game Over\nYour Final Score is: " + score.ToString();
+            //txtCenter.text += "\nPress (r) to continue";
+            lives--;
             Time.timeScale = 0;
             GameController.instance.PlayerDead();
         }
