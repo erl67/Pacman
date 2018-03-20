@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Maze : MonoBehaviour
 {
-    //public int sizeX = 20;
-    //public int sizeZ = 20;
     public MazeCell cellPrefab;
     private MazeCell[,] cells;
 
@@ -114,8 +112,7 @@ public class Maze : MonoBehaviour
         newCell.coordinates = coordinates;
         newCell.name = "Maze Cell " + coordinates.x + ", " + coordinates.z;
         newCell.transform.parent = transform;
-        newCell.transform.localPosition =
-        new Vector3(coordinates.x - size.x * 0.5f + 0.5f, -.5f, coordinates.z - size.z * 0.5f + 0.5f);
+        newCell.transform.localPosition = new Vector3(coordinates.x - size.x * 0.5f + 0.5f, -.5f, coordinates.z - size.z * 0.5f + 0.5f);
         return newCell;
     }
 }

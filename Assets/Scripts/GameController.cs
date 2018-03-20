@@ -64,11 +64,6 @@ public class GameController : MonoBehaviour {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        if (!spawn && Input.GetKeyDown(KeyCode.N))
-        {
-            PlayerDead();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
-        }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -105,32 +100,28 @@ public class GameController : MonoBehaviour {
             //Time.timeScale = 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.Home))
-        {
-            SceneManager.LoadScene(0);
-        }
 
-        if (timer < Time.time)
-        {
-            timer = Time.time + Random.Range(1f, 3f);
-            spawnGhost = true;
-        }
+        //if (timer < Time.time)
+        //{
+        //    timer = Time.time + Random.Range(1f, 3f);
+        //    spawnGhost = true;
+        //}
 
-        if (timer2 < Time.time)
-        {
-            timer2 = Time.time + Random.Range(2f, 4f);
-        }
+        //if (timer2 < Time.time)
+        //{
+        //    timer2 = Time.time + Random.Range(2f, 4f);
+        //}
         
-        if (spawn && spawnGhost)
-        {
-            xOffset = Random.Range(5f, -5f);
-            zOffset = Random.Range(5f, -5f);
-            //yOffset = Random.Range(5f, -5f);
+        //if (spawn && spawnGhost)
+        //{
+        //    xOffset = Random.Range(5f, -5f);
+        //    zOffset = Random.Range(5f, -5f);
+        //    //yOffset = Random.Range(5f, -5f);
 
-            Vector3 spawnOffset = new Vector3(xOffset, 0f, zOffset);
-            //var enemy = (GameObject)Instantiate(ghostPrefab, transform.position + spawnOffset, transform.rotation);
-            spawnGhost = false;
-        }
+        //    Vector3 spawnOffset = new Vector3(xOffset, 0f, zOffset);
+        //    //var enemy = (GameObject)Instantiate(ghostPrefab, transform.position + spawnOffset, transform.rotation);
+        //    spawnGhost = false;
+        //}
 
     }
 
@@ -146,7 +137,7 @@ public class GameController : MonoBehaviour {
 
     public void PlayerDead()
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         //Destroy(mazeInstance.gameObject);
 
         MuteBG();

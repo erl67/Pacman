@@ -9,50 +9,82 @@ public class PlayerController : MonoBehaviour {
     private Transform target;
     private NavMeshAgent agent;
 
+    Ray ray;
+    RaycastHit hit;
+
     private int score = 0, lives = 3;
     public Text txtScore;
     public Text txtLives;
-    public Text txtLevelEnd;
+    public Text txtCenter;
 
     void Start () {
         agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
+        txtLives.text = "Lives: " + lives;
+        txtScore.text += score;
     }
 
     void Update () {
-        float moveH = Input.GetAxis("Horizontal2");
-        float moveV = Input.GetAxis("Vertical2");
-        if (moveH != 0f)
-        {
-            Vector3 motion = new Vector3(moveH, 0f, 0f);
-            rb.AddForce(motion * 10f);
-        }
-        else if (moveV != 0f)
-        {
-            Vector3 motion = new Vector3(0f, 0f, moveV);
-            rb.AddForce(motion * 10f);
-        }
+
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            transform.position = transform.position + new Vector3(2f, 0f, 0f);
-
+            transform.position = transform.position + new Vector3(2f, 2f, 0f);
+            Debug.Log("Pacman " + gameObject.transform.position.ToString());
         }
 
-        //float h = Input.GetAxis("Horizontal");
-        //float v = Input.GetAxis("Vertical");
-        //rb.AddForce(new Vector3(h, 0f, v));
+ 
 
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
+            //Debug.Log("Mouse Down");
+            //Debug.Log(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100));
+            //Debug.Log(Physics.Raycast(transform.localPosition, out hit, Mathf.Infinity));
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            //Debug.DrawRay(transform.position, Input.mousePosition - transform.position);
+
+
+            //ray.origin = transform.position;
+            //ray.direction = transform.position + Input.mousePosition;
+
+            //RaycastHit hit;
+            //Ray.
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
+                txtCenter.text = "";
                 agent.destination = hit.point;
+                Debug.Log("Pacman moving to " + agent.destination);
+
             }
         }
 
+    }
+
+    private void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Home))
+        {
+            rb.velocity = Vector3.zero;
+            rb.AddForce(new Vector3(0f, 0f, 50f));
+        }
+        if (Input.GetKeyDown(KeyCode.End))
+        {
+            rb.velocity = Vector3.zero;
+            rb.AddForce(new Vector3(0f, 0f, -50f));
+        }
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            rb.velocity = Vector3.zero;
+            rb.AddForce(new Vector3(-50f, 0f, 0f));
+        }
+        if (Input.GetKeyDown(KeyCode.PageDown))
+        {
+            rb.velocity = Vector3.zero;
+            rb.AddForce(new Vector3(50f, 0f, 0f));
+        }
+        score--;
+        txtScore.text = "Score: " + score;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,17 +95,16 @@ public class PlayerController : MonoBehaviour {
         {
             Destroy(other.gameObject);
             score++;
-            //txtScore.text = "Score: " + score;
-            //txtLives.text = "Lives: " + lives;
+            txtScore.text = "Score: " + score;        
         }
 
         if (other.tag.Equals("ghost"))
         {
             //GameController.instance.MuteBG();
-            //txtLevelEnd.text = "Game Over\nYour Final Score is: " + score.ToString();
-            //txtLevelEnd.text += "\nPress (r) to continue";
-            //Time.timeScale = 0;
-            //GameController.instance.PlayerDead();
+            txtCenter.text = "Game Over\nYour Final Score is: " + score.ToString();
+            txtCenter.text += "\nPress (r) to continue";
+            Time.timeScale = 0;
+            GameController.instance.PlayerDead();
         }
     }
 
