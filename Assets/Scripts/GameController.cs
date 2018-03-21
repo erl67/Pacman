@@ -12,16 +12,16 @@ public class GameController : MonoBehaviour {
     public GameObject ghostPrefab;
     public int ghostCount;
 
-    public GameObject[] dots;
-    public GameObject[] walls;
+    public GameObject[] dots, walls, ghosts;
 
     private AudioSource background;
 
-    private float volume, timer, timer2;
-    private float xOffset = 0f, yOffset = 0f, zOffset = 0f;
+    private float volume, timer;
+    private float xOffset = 0f, zOffset = 0f;
 
     public Maze mazePrefab;
     private Maze mazeInstance;
+    private MeshRenderer mr;
 
     public Text txtCenter, txtHelp;
 
@@ -40,9 +40,10 @@ public class GameController : MonoBehaviour {
     }
 
     void Start () {
+        StartCoroutine(StartBox());
         Time.timeScale = 0;
         txtCenter.text = "Press any Key to Begin";
-        StartCoroutine(StartBox());
+        background = GetComponents<AudioSource>()[0];
         BeginGame();
     }
 
@@ -50,42 +51,47 @@ public class GameController : MonoBehaviour {
     {
         mazeInstance = Instantiate(mazePrefab) as Maze;
         mazeInstance.Generate();
-        background = GetComponents<AudioSource>()[0];
+        mazeInstance.name = "mazeInstance";
 
-        Debug.Log("Beginning Game");
-
-        //StartCoroutine(mazeInstance.Generate());
+        mazeInstance.ToggleMaze();
 
         dots = GameObject.FindGameObjectsWithTag("dot");
 
         bool deletedot = false; //reduce number of dots
         foreach (GameObject dot in dots)
         {
-            if (deletedot == true)
+            if (deletedot == true || (System.Math.Abs(dot.transform.position.x) < 2.5f && System.Math.Abs(dot.transform.position.z) < 2.5f))
             {
                 Destroy(dot);
             }
             deletedot = deletedot == true ? false : true;
         }
 
-        walls = GameObject.FindGameObjectsWithTag("mazewall");
+        walls = GameObject.FindGameObjectsWithTag("mazewallObs");
         foreach (GameObject wall in walls)
         {
-            Debug.Log(wall.transform.position);
+            if ((System.Math.Abs(wall.transform.position.x) < 3f && System.Math.Abs(wall.transform.position.z) < 3f) || 
+                (System.Math.Abs(wall.transform.position.x) > 18.0f && System.Math.Abs(wall.transform.position.z) > 18.0f))
+            {
+                Destroy(wall);
+            }
         }
 
 
+    }
 
+    public void MakeGhosts()
+    {
         var ghost1 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
         var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, -18f), transform.rotation);
         var ghost3 = (GameObject)Instantiate(ghostPrefab, new Vector3(-18f, 0, 18f), transform.rotation);
         var ghost4 = (GameObject)Instantiate(ghostPrefab, new Vector3(-18f, 0, -18f), transform.rotation);
-
     }
 
-    private IEnumerator StartBox()
+
+
+    public IEnumerator StartBox()
     {
-        txtCenter.text = "Press any Key to Begin";
         while (!Input.anyKey)
         {
             yield return null;
@@ -94,11 +100,16 @@ public class GameController : MonoBehaviour {
         txtCenter.text = "";
         background.Play();
         Time.timeScale = 1;
+        MakeGhosts();
+        mazeInstance.ToggleMaze();
+        GameObject.Find("Pacman").transform.position = new Vector3(0f, 0f, 0f);
     }
+
 
     void Update () {
 
-        if (GameController.instance.gameOver) {
+        if (GameController.instance.gameOver)
+        {
             PlayerDead();
         }
 
@@ -145,19 +156,14 @@ public class GameController : MonoBehaviour {
 
         if (timer < Time.time)
         {
-            timer = Time.time + Random.Range(3f, 5f);
+            timer = Time.time + Random.Range(5f, 10f);
             spawnGhost = true;
         }
-
-        //if (timer2 < Time.time)
-        //{
-        //    timer2 = Time.time + Random.Range(2f, 4f);
-        //}
 
         if (spawnGhost)
         {
             ghostCount = GameObject.FindGameObjectsWithTag("ghost").Length;
-            if (ghostCount < 10) {
+            if (ghostCount < 5) {
                 xOffset = Random.Range(-20f, 20f);
                 zOffset = Random.Range(-20f, 20f);
                 var ghostX = (GameObject)Instantiate(ghostPrefab, new Vector3(xOffset, 0, zOffset), transform.rotation);
@@ -167,20 +173,14 @@ public class GameController : MonoBehaviour {
 
     }
 
-    void OnBecameInvisible()
-    {
-        Debug.Log("GC Invisibile" + this.tag);
-    }
-
     public void MuteBG()
     {
-        background.mute = true;     //doesn't work on it's own in PlayerDead()
+        background.mute = true;
     }
 
     public void PlayerDead()
     {
         StopAllCoroutines();
-        //Destroy(mazeInstance.gameObject);
 
         MuteBG();
         spawnGhost = false;

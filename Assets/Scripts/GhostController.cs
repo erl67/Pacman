@@ -7,7 +7,7 @@ public class GhostController : MonoBehaviour
 {
     private Rigidbody rb;
 
-    private float speed, lifespan;
+    private float speed;
 
     public Transform target;
     private NavMeshAgent agent;
@@ -16,8 +16,11 @@ public class GhostController : MonoBehaviour
 
     void Start()
     {
+
         agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+
         //mr = gameObject.GetComponent<MeshRenderer>();
         //mr = gameObject.GetComponent<Tree>().GetComponent<MeshRenderer>();
 
@@ -25,7 +28,7 @@ public class GhostController : MonoBehaviour
 
 
         rb.transform.localScale *= Random.Range(.9f, 1.1f);
-        agent.speed = Random.Range(3f, 10f);
+        agent.speed = Random.Range(3f, 5f);
         //mr.material.color = Color.red;
         //gameObject.GetComponent<MeshRenderer>().material.color = new Color(0f, 0f, Random.Range(0f,1f), 1);
 
@@ -42,18 +45,9 @@ public class GhostController : MonoBehaviour
 
         if (other.tag.Equals("player"))
         {
-            //GhostDies();
+            //Destroy(gameObject);
         }
     }
 
-    private void GhostDies()
-    {
-        Destroy(gameObject);
-    }
 
-    void OnBecameInvisible()
-    {
-        Debug.Log("Ghost Invisibile");
-        //Destroy(gameObject);
-    }
 }

@@ -14,6 +14,33 @@ public class Maze : MonoBehaviour
     public MazePassage passagePrefab;
     public MazeWall wallPrefab;
 
+    private bool mazeVisible = true;
+    private GameObject[] ghosts, walls;
+
+    public void ToggleMaze()
+    {
+        mazeVisible = mazeVisible == true ? false : true;
+        float scale = mazeVisible == true ? 1f : 0f;
+
+        //GameObject.Find("mazeInstance").gameObject.transform.localScale = new Vector3(scale, scale, scale);
+        walls = GameObject.FindGameObjectsWithTag("ExtWall");
+        ghosts = GameObject.FindGameObjectsWithTag("ghost");
+        foreach (GameObject ghost in ghosts) ghost.gameObject.transform.localScale = new Vector3(scale, scale, scale);
+
+        switch (mazeVisible)
+        {
+            case false:
+                foreach (GameObject wall in walls) wall.gameObject.transform.localScale = new Vector3(scale, scale, scale);
+                GameObject.FindGameObjectWithTag("floor").transform.localScale = new Vector3(scale, scale, scale);
+                break;
+            case true:
+            default:
+                foreach (GameObject wall in walls) wall.gameObject.transform.localScale = new Vector3(.5f, 5f, 41f);
+                GameObject.FindGameObjectWithTag("floor").transform.localScale = new Vector3(4f, 1f, 4f);
+                break;
+        }
+    }
+
     public IntVector2 RandomCoordinates
     {
         get

@@ -21,34 +21,13 @@ public class CameraController : MonoBehaviour {
     }
 
     void LateUpdate() {
-        //https://answers.unity.com/questions/218347/how-do-i-make-the-camera-zoom-in-and-out-with-the.html
         transform.position = pacman.transform.position + offset;
+
+        //https://answers.unity.com/questions/218347/how-do-i-make-the-camera-zoom-in-and-out-with-the.html
         fov += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
         fov = Mathf.Clamp(fov, minFov, maxFov);
         Camera.main.fieldOfView = fov;
     }
-
-        //if (Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    Debug.Log(transform.position);
-        //    offset = transform.position - pacman.transform.position;
-        //    //offset *= .5f;
-        //    //transform.position = (transform.position + offset) * 10f;
-        //    //transform.position = pacman.transform.position + (offset * .9f);
-
-        //    //transform.position = transform.position + offset;
-        //    transform.position = (transform.position + offset) + new Vector3(.9f, .9f, .9f);
-
-        //    Debug.Log(transform.position);
-
-        //}
-        //else if (Input.GetKeyDown(KeyCode.X))
-        //{
-        //    transform.position = transform.position + (offset * .95f);
-        //}
-        //else
-        //{
-        //}
 
     void Update()
     {
