@@ -14,8 +14,6 @@ Movement – Mouse click to move player
 
 Movement(alt) - TFGH
 
-Jump - Space
-
 Camera Rotate - WASD or Arrow Keys
 
 Camera Zoom - MouseWheel

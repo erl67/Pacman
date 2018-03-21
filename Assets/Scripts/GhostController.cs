@@ -14,6 +14,8 @@ public class GhostController : MonoBehaviour
     private MeshRenderer mr;
     private Tree tree;
 
+    public Material[] mats = new Material[10];
+
     public AudioSource ghostDie, ghostSpawn;
     public bool playOnce = true;
 
@@ -38,19 +40,24 @@ public class GhostController : MonoBehaviour
         var mr = tree.GetComponent<MeshRenderer>();
 
         Debug.Log(gameObject.name + "mainTexture: " + tr.material.mainTexture);
-
-        //tr.materials[0] = tr.materials[1];
+        Debug.Log("mats: " + mats.Length);
 
         tr.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-        var mats = tr.materials;
+
+
+        //tr.material = mats[random.Next(0, mats.Length)];
+        //tr.material = mats[(int)System.Math.Floor(Random.Range(0f, mats.Length))];
+        //tr.material = mats[2];
+
+
         tr.material = mats[1];
 
 
-        //tr.material.SetTexture(Shader.PropertyToID, "Pills 07 Diffuse");
 
 
 
-        Debug.Log("Mats " + mats.Length);
+
+        //Debug.Log("Mats " + mats.Length);
     }
 
     void FixedUpdate()
