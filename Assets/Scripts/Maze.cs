@@ -28,7 +28,8 @@ public class Maze : MonoBehaviour
         floor = GameObject.Find("FloorNav");
         ghosts = GameObject.FindGameObjectsWithTag("ghost");
 
-        mazeInstance.transform.localScale = new Vector3(scale, scale, scale);
+        //mazeInstance.transform.localScale = new Vector3(scale, scale, scale);   //this makes pacman eat the entire maze when it shrinks
+
         foreach (GameObject ghost in ghosts) ghost.gameObject.transform.localScale = new Vector3(scale, scale, scale);
 
         switch (mazeVisible)
@@ -36,11 +37,13 @@ public class Maze : MonoBehaviour
             case false:
                 foreach (GameObject wall in walls) wall.gameObject.transform.localScale = new Vector3(scale, scale, scale);
                 floor.GetComponent<MeshRenderer>().enabled = false;
+                mazeInstance.transform.position = new Vector3(0f, 1000f, 0f);   //hide the maze in the sky instead
                 break;
             case true:
             default:
                 foreach (GameObject wall in walls) wall.gameObject.transform.localScale = new Vector3(.5f, 5f, 41f);
                 floor.GetComponent<MeshRenderer>().enabled = true;
+                mazeInstance.transform.position = new Vector3(0f, 0f, 0f);
                 break;
         }
     }
@@ -64,16 +67,12 @@ public class Maze : MonoBehaviour
     }
 
     public void Generate()
-    //public IEnumerator Generate()
     {
-        //WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
         cells = new MazeCell[size.x, size.z];
         List<MazeCell> activeCells = new List<MazeCell>();
         DoFirstGenerationStep(activeCells);
         while (activeCells.Count > 0)
         {
-            //yield return delay;
-            //yield return null;
             DoNextGenerationStep(activeCells);
         }
         Debug.Log("Maze Complete, resuming time");

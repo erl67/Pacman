@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1478404697422438}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19, y: 0, z: 19}
+  m_LocalPosition: {x: 19, y: -0.1, z: 19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4346759889664526}
@@ -84,12 +84,18 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 21580240300945286, guid: 8ae5cb050efe2684a9d7e18317279d80, type: 2}
+  - {fileID: 2100000, guid: 06cc3b978050c624b926691e92d8bd9c, type: 2}
+  - {fileID: 2100000, guid: e0de8d96fd3d35848a0d634de5c4bf11, type: 2}
+  - {fileID: 2100000, guid: b2ec20f1b56cdf849b47e683ce48a51a, type: 2}
+  - {fileID: 2100000, guid: b1b901818189f2c4e94b31a93adbfb0b, type: 2}
+  - {fileID: 2100000, guid: 0aee01e636e75244bbf59eb29c604b31, type: 2}
+  - {fileID: 2100000, guid: 930c5171e1887834e8c6879e1d4be5d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,6 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  ghostDie: {fileID: 0}
+  ghostSpawn: {fileID: 0}
+  playOnce: 1
 --- !u!135 &135822575010383764
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -172,16 +181,16 @@ NavMeshAgent:
   m_GameObject: {fileID: 1478404697422438}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.1
+  m_Radius: 0.15
   m_Speed: 2
   m_Acceleration: 10
   avoidancePriority: 75
   m_AngularSpeed: 360
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 0
-  m_AutoBraking: 1
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_WalkableMask: 1
+  m_ObstacleAvoidanceType: 3

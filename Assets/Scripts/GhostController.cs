@@ -7,44 +7,78 @@ public class GhostController : MonoBehaviour
 {
     private Rigidbody rb;
 
-    private float speed, timer;
+    private float speed, timer, updateTimer = 1f;
 
     public Transform target;
     private NavMeshAgent agent;
     private MeshRenderer mr;
     private Tree tree;
 
+    public AudioSource ghostDie, ghostSpawn;
+    public bool playOnce = true;
+
     void Start()
     {
-        agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
-        target = GameObject.FindGameObjectWithTag("Player").transform;
-        agent.destination = target.position;
 
-        timer = Time.time + 5f;
+        agent = gameObject.GetComponent<NavMeshAgent>();
+        agent.Warp(gameObject.transform.position);  //make sure it's on the mesh
+        agent.speed = Random.Range(4f, 10f);
 
-        //mr = gameObject.GetComponent<MeshRenderer>();
-        //mr = gameObject.GetComponent<Tree>().GetComponent<MeshRenderer>();
+        target = GameObject.Find("Pacman").transform;
 
-        //tree = gameObject.GetComponent<Tree>();
+        timer = Time.time + 8f;
+
+        ghostDie = GameObject.Find("GhostSound").gameObject.GetComponent<AudioSource>();
+        ghostSpawn = GameObject.Find("GhostSpawn").gameObject.GetComponent<AudioSource>();    //clones won't play attached audio
+        ghostSpawn.Play();
+
+        var tree = gameObject.GetComponentInChildren<Tree>();
+        var tr = tree.GetComponent<Renderer>();
+        var mr = tree.GetComponent<MeshRenderer>();
+
+        Debug.Log(gameObject.name + "mainTexture: " + tr.material.mainTexture);
+
+        //tr.materials[0] = tr.materials[1];
+
+        tr.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+        var mats = tr.materials;
+        tr.material = mats[1];
 
 
-        rb.transform.localScale *= Random.Range(.9f, 1.1f);
-        agent.speed = Random.Range(3f, 5f);
-        //mr.material.color = Color.red;
-        //gameObject.GetComponent<MeshRenderer>().material.color = new Color(0f, 0f, Random.Range(0f,1f), 1);
+        //tr.material.SetTexture(Shader.PropertyToID, "Pills 07 Diffuse");
 
+
+
+        Debug.Log("Mats " + mats.Length);
     }
 
     void FixedUpdate()
     {
-
         if (timer < Time.time)
         {
-            timer = Time.time + 5f;
-            Debug.Log(this.name + " " + agent.transform.position);
-            agent.destination = target.position;
+            rb.transform.localScale *= Random.Range(.9f, .97f);
+            agent.speed *= rb.transform.localScale.y;
+            agent.ResetPath();
 
+            if (agent.speed < 2f && playOnce)
+            {
+                playOnce = agent.enabled = false;
+                ghostDie.Play();
+                rb.angularVelocity = new Vector3(Random.Range(30f, 120f), Random.Range(30f, 120f), Random.Range(30f, 120f));
+                Destroy(gameObject, 4f);
+            }
+            else if (playOnce)
+            {
+                timer = Time.time + Random.Range(5f, 8f);
+                //Debug.Log(this.name + " " + transform.position + " " + transform.localScale + " " + transform);
+            }
+        }
+
+        if (updateTimer < Time.time)
+        {
+            agent.destination = target.position;
+            updateTimer = Time.time + 1f;
         }
     }
 
@@ -54,9 +88,11 @@ public class GhostController : MonoBehaviour
 
         if (other.tag.Equals("player"))
         {
-            //Destroy(gameObject);
+            Debug.Log("Ghost died : " + gameObject.transform.position);
+            Destroy(gameObject);
         }
     }
+
 
 
 }

@@ -20,7 +20,8 @@ public class CameraController : MonoBehaviour {
     void Start() {
         overhead = GameObject.Find("OverheadLight").gameObject.GetComponent<Light>();
         spotlight = GameObject.Find("Spotlight").gameObject.GetComponent<Light>();
-        //spotlight.enabled = false;
+        spotlight.enabled = true;
+        overhead.enabled = false;
 
         offset = transform.position - pacman.transform.position;
         Debug.Log(transform.position + " " + pacman.transform.position);
@@ -78,8 +79,8 @@ public class CameraController : MonoBehaviour {
 
     public void ResetCamera()
     {
+        Camera.main.fieldOfView = 90;
         Camera.main.transform.position = camStartP;
         Camera.main.transform.rotation = camStartR;
-        Camera.main.fieldOfView = fovStart;
     }
 }

@@ -11,10 +11,11 @@ public class GameController : MonoBehaviour {
 
     public GameObject ghostPrefab;
     public int ghostCount;
+    private GameObject ghost1, ghost2, ghost3, ghost4, ghostX;
 
     public GameObject[] dots, walls, ghosts;
 
-    private AudioSource background;
+    private AudioSource background, endSound;
 
     private float volume, timer;
     private float xOffset = 0f, zOffset = 0f;
@@ -24,7 +25,6 @@ public class GameController : MonoBehaviour {
     private MeshRenderer mr;
 
     public Text txtCenter, txtHelp;
-
 
     private void Awake()
     {
@@ -53,7 +53,6 @@ public class GameController : MonoBehaviour {
         mazeInstance.Generate();
         mazeInstance.name = "mazeInstance";
 
-        mazeInstance.ToggleMaze();
 
         dots = GameObject.FindGameObjectsWithTag("dot"); //reduce number of dots
         foreach (GameObject dot in dots)
@@ -75,18 +74,16 @@ public class GameController : MonoBehaviour {
             }
         }
 
-
+        mazeInstance.ToggleMaze();
     }
 
     public void MakeGhosts()
     {
-        var ghost1 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
-        var ghost2 = (GameObject)Instantiate(ghostPrefab, new Vector3(18f, 0, -18f), transform.rotation);
-        var ghost3 = (GameObject)Instantiate(ghostPrefab, new Vector3(-18f, 0, 18f), transform.rotation);
-        var ghost4 = (GameObject)Instantiate(ghostPrefab, new Vector3(-18f, 0, -18f), transform.rotation);
+        ghost1 = Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
+        ghost2 = Instantiate(ghostPrefab, new Vector3(18f, 0, -18f), transform.rotation);
+        ghost3 = Instantiate(ghostPrefab, new Vector3(-18f, 0, 18f), transform.rotation);
+        ghost4 = Instantiate(ghostPrefab, new Vector3(-18f, 0, -18f), transform.rotation);
     }
-
-
 
     public IEnumerator StartBox()
     {
@@ -96,7 +93,6 @@ public class GameController : MonoBehaviour {
         }
         txtHelp.text = "";
         txtCenter.text = "";
-        //background.Play();
         Time.timeScale = 1;
         MakeGhosts();
         mazeInstance.ToggleMaze();
@@ -111,10 +107,11 @@ public class GameController : MonoBehaviour {
             PlayerDead();
         }
 
-        if (gameOver && Input.GetKeyDown(KeyCode.R))
+        if ((gameOver && Input.GetKeyDown(KeyCode.R)) || Input.GetKeyDown(KeyCode.Backspace))
         {
-            GameObject.Find("Spotlight").SetActive(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GameObject.Find("OverheadLight").gameObject.GetComponent<Light>().enabled = false;
+            GameObject.Find("Spotlight").gameObject.GetComponent<Light>().enabled = true;
         }
 
 
@@ -147,25 +144,29 @@ public class GameController : MonoBehaviour {
         {
         }
 
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-
         if (timer < Time.time)
         {
-            timer = Time.time + Random.Range(5f, 10f);
+            timer = Time.time + 5f;
             spawnGhost = true;
         }
 
         if (spawnGhost)
         {
             ghostCount = GameObject.FindGameObjectsWithTag("ghost").Length;
-            if (ghostCount < 5) {
+            if (ghostCount < 10) {
                 xOffset = Random.Range(-20f, 20f);
                 zOffset = Random.Range(-20f, 20f);
-                var ghostX = (GameObject)Instantiate(ghostPrefab, new Vector3(xOffset, 0, zOffset), transform.rotation);
+                Vector3 spot = new Vector3(xOffset, 0, zOffset);
+
+                Transform target = GameObject.Find("Pacman").gameObject.transform;
+                transform.LookAt(target);
+
+                float distance = Vector3.Distance(spot, target.position);
+
+                if (distance > 7f)
+                {
+                    ghostX = Instantiate(ghostPrefab, spot, transform.rotation);
+                }
             }
             spawnGhost = false;
         }
@@ -180,7 +181,6 @@ public class GameController : MonoBehaviour {
     public void PlayerDead()
     {
         StopAllCoroutines();
-
         MuteBG();
         spawnGhost = false;
         gameOver = true;
