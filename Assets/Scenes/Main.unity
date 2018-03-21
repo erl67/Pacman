@@ -139,12 +139,12 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 120799377}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!195 &120799379
@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98bd2673f829bc34c8315ca93ccfe9d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   mazeInstance: {fileID: 0}
   txtScore: {fileID: 904939924}
   txtLives: {fileID: 1221635402}
@@ -572,6 +573,11 @@ MonoBehaviour:
   maxFov: 90
   sensitivity: 10
   fov: 0
+  fovStart: 0
+  camStartP: {x: 0, y: 0, z: 0}
+  camStartR: {x: 0, y: 0, z: 0, w: 0}
+  overhead: {fileID: 0}
+  spotlight: {fileID: 0}
 --- !u!1 &724929365
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,7 +710,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1001806656
 Transform:
   m_ObjectHideFlags: 0
@@ -728,12 +734,12 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 5
+  m_Intensity: 10
   m_Range: 50
   m_SpotAngle: 36
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: 0
     m_CustomResolution: -1
     m_Strength: 1
@@ -836,7 +842,7 @@ GameObject:
   - component: {fileID: 1093949552}
   - component: {fileID: 1093949553}
   m_Layer: 0
-  m_Name: Directional light
+  m_Name: OverheadLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -923,7 +929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 450}
+  m_AnchoredPosition: {x: -50, y: 470}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1101832660
@@ -958,27 +964,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Instructions:
-
-    Click Mouse to Move
-
-    WASD to rotate camera
-
-    Scroll Wheel to Zoom Camera
-
-    Home/End/Del/PgDn to move manually
-
-    Space - Jump in random direction
-
-    Q - Quit
-
-    P - Pause
-
-    Backspace- Restart
-
-    Eat the dots
-
-'
+  m_Text: "Instructions:\nClick Mouse to Move\nCamera:\n\t-WASD = rotate\n\t-MouseWheel
+    = zoom\n\t-MiddleMouse = reset view\n\t-O/L/I = toggle overhead/spot/both lights\n\nT/G/F/H
+    to move manually\nSpace - Jump in random direction\nRight Mouse - sacrifice life\nQ
+    - Quit\nP - Pause\nBackspace- Restart"
 --- !u!222 &1101832661
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1187,8 +1176,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: -50}
+  m_SizeDelta: {x: 1080, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1506010197
 MonoBehaviour:
@@ -1216,7 +1205,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 1
@@ -1409,8 +1398,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1691846989}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 4.1, y: 1, z: 4.1}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalScale: {x: 4, y: 1, z: 4}
   m_Children: []
   m_Father: {fileID: 1609755539}
   m_RootOrder: 0
@@ -1424,12 +1413,12 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 0
-  m_DynamicOccludee: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 2
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: a6fa5bd2d2af7664685ca22809135b94, type: 2}
+  - {fileID: 2100000, guid: ca2c8ef654fac6c47955f62cbddf104d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1480,7 +1469,6 @@ GameObject:
   - component: {fileID: 1717157157}
   - component: {fileID: 1717157156}
   - component: {fileID: 1717157158}
-  - component: {fileID: 1717157159}
   m_Layer: 0
   m_Name: Main
   m_TagString: GameController
@@ -1501,6 +1489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOver: 0
   spawnGhost: 0
+  deletedot: 0
   ghostPrefab: {fileID: 1013557372411078, guid: 873c0d160198fbe47819d581294977f6,
     type: 2}
   ghostCount: 0
@@ -1533,7 +1522,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 386df1615c74b2341bf580a9b4936615, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
@@ -1603,19 +1592,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &1717157159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1717157155}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4e00f4ecfeacde409ef5a2e61612d88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txtCenter: {fileID: 1506010197}
-  txtHelp: {fileID: 1101832660}
 --- !u!1 &1718425685
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,6 +1732,11 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 120799382}
+    - target: {fileID: 54718214034519512, guid: 417cdece68617dc499b73067b4b61eb4,
+        type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 417cdece68617dc499b73067b4b61eb4, type: 2}
   m_IsPrefabParent: 0

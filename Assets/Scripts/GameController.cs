@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
     public static GameController instance;
     public bool gameOver;
-    public bool spawnGhost = false;
+    public bool spawnGhost = false, deletedot = false;
 
     public GameObject ghostPrefab;
     public int ghostCount;
@@ -55,9 +55,7 @@ public class GameController : MonoBehaviour {
 
         mazeInstance.ToggleMaze();
 
-        dots = GameObject.FindGameObjectsWithTag("dot");
-
-        bool deletedot = false; //reduce number of dots
+        dots = GameObject.FindGameObjectsWithTag("dot"); //reduce number of dots
         foreach (GameObject dot in dots)
         {
             if (deletedot == true || (System.Math.Abs(dot.transform.position.x) < 2.5f && System.Math.Abs(dot.transform.position.z) < 2.5f))
@@ -98,7 +96,7 @@ public class GameController : MonoBehaviour {
         }
         txtHelp.text = "";
         txtCenter.text = "";
-        background.Play();
+        //background.Play();
         Time.timeScale = 1;
         MakeGhosts();
         mazeInstance.ToggleMaze();
@@ -115,6 +113,7 @@ public class GameController : MonoBehaviour {
 
         if (gameOver && Input.GetKeyDown(KeyCode.R))
         {
+            GameObject.Find("Spotlight").SetActive(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
@@ -144,7 +143,7 @@ public class GameController : MonoBehaviour {
             AudioListener.volume = AudioListener.volume * 1.1f;
         }
 
-        if (Input.GetKeyDown(KeyCode.F1) || Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.F1) || Input.GetKeyDown(KeyCode.U))
         {
         }
 

@@ -7,7 +7,7 @@ public class GhostController : MonoBehaviour
 {
     private Rigidbody rb;
 
-    private float speed;
+    private float speed, timer;
 
     public Transform target;
     private NavMeshAgent agent;
@@ -16,10 +16,12 @@ public class GhostController : MonoBehaviour
 
     void Start()
     {
-
         agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
+        agent.destination = target.position;
+
+        timer = Time.time + 5f;
 
         //mr = gameObject.GetComponent<MeshRenderer>();
         //mr = gameObject.GetComponent<Tree>().GetComponent<MeshRenderer>();
@@ -36,7 +38,14 @@ public class GhostController : MonoBehaviour
 
     void FixedUpdate()
     {
-        agent.destination = target.position;
+
+        if (timer < Time.time)
+        {
+            timer = Time.time + 5f;
+            Debug.Log(this.name + " " + agent.transform.position);
+            agent.destination = target.position;
+
+        }
     }
 
     private void OnTriggerEnter(Collider other)

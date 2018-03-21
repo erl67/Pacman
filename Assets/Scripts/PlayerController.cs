@@ -10,22 +10,31 @@ public class PlayerController : MonoBehaviour {
     private NavMeshAgent agent;
     private RaycastHit hit;
 
-    //private GameController gc;
-    //public PlayerLifespan pl;
-    //public GameObject player;
+    public GameObject player;
     public Maze mazeInstance;
 
     private int score = 0, lives = 3;
     public Text txtScore, txtLives, txtCenter;
     public AudioSource eatPill;
 
-    void Start () {
+    
+
+    IEnumerator Start () {
         agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
+        player = GameObject.Find("Pacman").gameObject;
 
         txtLives.text = "Lives: " + lives;
         txtScore.text = "Score: " + score;
         eatPill = GetComponents<AudioSource>()[0];
+
+        yield return new WaitForSecondsRealtime(3);
+        mazeInstance = GameObject.Find("mazeInstance").GetComponent<Maze>();
+    }
+
+    void StartPlay()
+    {
+
     }
 
 
@@ -40,7 +49,7 @@ public class PlayerController : MonoBehaviour {
         }
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && agent.isActiveAndEnabled)
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
@@ -49,29 +58,33 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            LoseLife();
+        }
     }
 
     private void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Home))
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            agent.destination = Vector3.zero;
-            rb.velocity = Vector3.zero;
+            //agent.destination = Vector3.zero;
+            //rb.velocity = Vector3.zero;
             rb.AddForce(new Vector3(0f, 0f, 50f));
         }
-        if (Input.GetKeyDown(KeyCode.End))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             agent.destination = Vector3.zero;
             rb.velocity = Vector3.zero;
             rb.AddForce(new Vector3(0f, 0f, -50f));
         }
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             agent.destination = Vector3.zero;
             rb.velocity = Vector3.zero;
             rb.AddForce(new Vector3(-50f, 0f, 0f));
         }
-        if (Input.GetKeyDown(KeyCode.PageDown))
+        if (Input.GetKeyDown(KeyCode.H))
         {
             agent.destination = Vector3.zero;
             rb.velocity = Vector3.zero;
@@ -80,26 +93,7 @@ public class PlayerController : MonoBehaviour {
     }
 
 
-    public void NewLife()
-    {
-        Time.timeScale = 0;
-        var ghosts = GameObject.FindGameObjectsWithTag("ghost");
-        foreach (GameObject ghost in ghosts) Destroy(ghost);
-        StartCoroutine(StartBox());
-    }
 
-    public IEnumerator StartBox()
-    {
-        while (!Input.anyKey)
-        {
-            yield return null;
-        }
-        txtCenter.text = "";
-        GameController.instance.MakeGhosts();
-        mazeInstance.ToggleMaze();
-        GameObject.Find("Pacman").transform.position = new Vector3(0f, 0f, 0f);
-        Time.timeScale = 1;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -120,26 +114,56 @@ public class PlayerController : MonoBehaviour {
 
         if (other.tag.Equals("ghost"))
         {
-            lives--;
-            txtLives.text = "Lives: " + lives;
 
-            Time.timeScale = 0;
-            mazeInstance = GameObject.Find("mazeInstance").GetComponent<Maze>();
-
-            if (lives == 0)
-            {
-                txtCenter.text = "Game Over\nYour Final Score is: " + score.ToString();
-                GameController.instance.PlayerDead();
-                mazeInstance.ToggleMaze();
-            }
-            else
-            {
-                Time.timeScale = 0;
-                mazeInstance.ToggleMaze();
-                txtCenter.text = "\nYou got eaten by a ghost.\nPress (r) to continue";
-                NewLife();
-            }
+            LoseLife();
         }
+    }
+
+    private void LoseLife()
+    {
+        //agent.destination = Vector3.zero;
+        //agent.enabled = false;
+
+        lives--;
+        txtLives.text = "Lives: " + lives;
+
+        Time.timeScale = 0;
+        mazeInstance.ToggleMaze();
+
+        if (lives == 0)
+        {
+            txtCenter.text = "Game Over\nYour Final Score is: " + score.ToString();
+            GameController.instance.PlayerDead();
+        }
+        else
+        {
+            txtCenter.text = "\nYou got eaten by a ghost.\nPress (r) to continue";
+            NewLife();
+        }
+    }
+
+    public void NewLife()
+    {
+        var ghosts = GameObject.FindGameObjectsWithTag("ghost");
+        foreach (GameObject ghost in ghosts) Destroy(ghost);
+        StartCoroutine(StartBox());
+    }
+
+    public IEnumerator StartBox()
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        while (!(Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Space)))
+        {
+            yield return null;
+        }
+        txtCenter.text = "";
+        GameController.instance.MakeGhosts();
+        mazeInstance.ToggleMaze();
+
+        Time.timeScale = 1;
+        player.transform.position = new Vector3(0f, 0f, 0f);
+        //agent.enabled = true;
     }
 
 }

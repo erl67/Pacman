@@ -16,27 +16,31 @@ public class Maze : MonoBehaviour
 
     private bool mazeVisible = true;
     private GameObject[] ghosts, walls;
+    private GameObject floor, mazeInstance;
 
     public void ToggleMaze()
     {
         mazeVisible = mazeVisible == true ? false : true;
         float scale = mazeVisible == true ? 1f : 0f;
 
-        //GameObject.Find("mazeInstance").gameObject.transform.localScale = new Vector3(scale, scale, scale);
+        mazeInstance = GameObject.Find("mazeInstance");
         walls = GameObject.FindGameObjectsWithTag("ExtWall");
+        floor = GameObject.Find("FloorNav");
         ghosts = GameObject.FindGameObjectsWithTag("ghost");
+
+        mazeInstance.transform.localScale = new Vector3(scale, scale, scale);
         foreach (GameObject ghost in ghosts) ghost.gameObject.transform.localScale = new Vector3(scale, scale, scale);
 
         switch (mazeVisible)
         {
             case false:
                 foreach (GameObject wall in walls) wall.gameObject.transform.localScale = new Vector3(scale, scale, scale);
-                GameObject.FindGameObjectWithTag("floor").transform.localScale = new Vector3(scale, scale, scale);
+                floor.GetComponent<MeshRenderer>().enabled = false;
                 break;
             case true:
             default:
                 foreach (GameObject wall in walls) wall.gameObject.transform.localScale = new Vector3(.5f, 5f, 41f);
-                GameObject.FindGameObjectWithTag("floor").transform.localScale = new Vector3(4f, 1f, 4f);
+                floor.GetComponent<MeshRenderer>().enabled = true;
                 break;
         }
     }
@@ -103,13 +107,11 @@ public class Maze : MonoBehaviour
             else
             {
                 CreateWall(currentCell, neighbor, direction);
-                // No longer remove the cell here.
             }
         }
         else
         {
             CreateWall(currentCell, null, direction);
-            // No longer remove the cell here.
         }
     }
 

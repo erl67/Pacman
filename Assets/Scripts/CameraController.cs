@@ -9,15 +9,26 @@ public class CameraController : MonoBehaviour {
     private float x, y, moveH, moveV;
     private Vector3 rotateValue;
 
-    public float minFov = 15f;
-    public float maxFov = 90f;
-    public float sensitivity = 10f;
-    public float fov;
+    public float minFov = 15f, maxFov = 120f, sensitivity = 5f;
+    public float fov, fovStart;
+
+    public Vector3 camStartP;
+    public Quaternion camStartR;
+
+    public Light overhead, spotlight;
 
     void Start() {
+        overhead = GameObject.Find("OverheadLight").gameObject.GetComponent<Light>();
+        spotlight = GameObject.Find("Spotlight").gameObject.GetComponent<Light>();
+        //spotlight.enabled = false;
+
         offset = transform.position - pacman.transform.position;
         Debug.Log(transform.position + " " + pacman.transform.position);
+
         fov = Camera.main.fieldOfView;
+        camStartP = Camera.main.transform.position;
+        camStartR = Camera.main.transform.rotation;
+        fovStart = fov;
     }
 
     void LateUpdate() {
@@ -36,6 +47,39 @@ public class CameraController : MonoBehaviour {
         moveV = Input.GetAxis("Vertical");
         rotateValue = new Vector3(moveV, moveH * -1, 0);
         transform.eulerAngles = transform.eulerAngles - rotateValue;
-        //Debug.Log(x + ":" + y + "   " + moveH + ":" + moveV);
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            ResetCamera();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            var None = spotlight.enabled == false ? spotlight.enabled = true : spotlight.enabled = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            var None = overhead.enabled == false ? overhead.enabled = true : overhead.enabled = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            LightSwitch();
+        }
+    }
+
+    public static void LightSwitch()
+    {
+        var over = GameObject.Find("OverheadLight").gameObject.GetComponent<Light>();
+        var spot = GameObject.Find("Spotlight").gameObject.GetComponent<Light>();
+        var None = spot.enabled == false ? spot.enabled = over.enabled = true : spot.enabled = over.enabled = false;
+    }
+
+    public void ResetCamera()
+    {
+        Camera.main.transform.position = camStartP;
+        Camera.main.transform.rotation = camStartR;
+        Camera.main.fieldOfView = fovStart;
     }
 }

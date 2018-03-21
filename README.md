@@ -4,25 +4,32 @@ Made in Unity 3D
 
 # Background:
 
-Eat the things
+Eat the pills and avoid the ghost.
+You start with 3 lives and lose one life if a ghost catches you.
 
 
 # Controls:
 
 Movement – Mouse click to move player
 
-Camera - WASD, Arrow Keys
+Movement(alt) - TFGH
+
+Jump - Space
+
+Camera Rotate - WASD or Arrow Keys
+
+Camera Zoom - MouseWheel
+
+Camera Reset - Middle Button
+
+Lights - O/L to toggle overhead and spotlight, I to toggle both
 
 P – Pause
 
 Q – Quit
 
-Right Mouse – self-destruct
-
-K/M – Volume up/down
+Right Mouse – self-destruct and lose a life
 
 R – reset
 
-N – next level
-
-F1 - easy mode
+U - easy mode (noclip)
