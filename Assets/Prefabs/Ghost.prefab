@@ -115,7 +115,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1149096500411124}
-  m_Mesh: {fileID: 43114167405019418, guid: 3e48f12d226cb5c4387af8cdc8e2fa81, type: 2}
+  m_Mesh: {fileID: 43951582590217624, guid: 66a0939c2a0b1b643b7bf3d68b43a2bf, type: 2}
 --- !u!54 &54131709731902274
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -127,7 +127,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

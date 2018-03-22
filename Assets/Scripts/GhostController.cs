@@ -41,21 +41,12 @@ public class GhostController : MonoBehaviour
 
         //Debug.Log(gameObject.name + " tr.material: " + tr.material);
         //Debug.Log("mats: " + mats.Length);
-
         //nothing works to change material
-        //tr.material = mats[random.Next(0, mats.Length)];
-        //tr.material = mats[(int)System.Math.Floor(Random.Range(0f, mats.Length))];
-        //tr.material = mats[2];
         //tr.material = mats[0];
         //tr.materials = mats;
-        //tr.material = tr.materials[(int) Random.Range(0, 9)];
         //tr.material = tr.materials[9];
-        //tr.material.CopyPropertiesFromMaterial(mats[3]);
-        //var mat = Instantiate(mats[0], Vector3.zero, transform.rotation) as Material;
-        //tr.material = mat;
 
         tr.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-        //Debug.Log(gameObject.name + " tr.material: " + tr.material + " ---9: " + tr.materials[9]);
     }
 
     void FixedUpdate()
@@ -70,6 +61,7 @@ public class GhostController : MonoBehaviour
                 gameObject.GetComponent<SphereCollider>().enabled = false;
                 playOnce = agent.enabled = false;
                 ghostDie.Play();
+                rb.isKinematic = false;
                 rb.angularVelocity = new Vector3(Random.Range(60f, 120f), 0f, Random.Range(60f, 120f));
                 Destroy(gameObject, 4f);
             }
@@ -80,21 +72,10 @@ public class GhostController : MonoBehaviour
             }
         }
 
-        if (updateTimer < Time.time)
+        if (updateTimer < Time.time && targetAgent.isActiveAndEnabled && agent.isActiveAndEnabled)
         {
-            if (targetAgent.isActiveAndEnabled && agent.isActiveAndEnabled) agent.destination = target.position;
-            updateTimer = Time.time + 1f;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Ghost collision " + other.tag);
-
-        if (other.tag.Equals("player"))
-        {
-            Debug.Log("Ghost died : " + gameObject.transform.position);
-            Destroy(gameObject);
+            agent.destination = target.position;
+            updateTimer = Time.time + Random.Range(.1f,.2f);
         }
     }
 

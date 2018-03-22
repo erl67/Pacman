@@ -116,7 +116,7 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             PlayerDead();
-            UnityEditor.EditorApplication.isPlaying = false;  //hide for build
+            //UnityEditor.EditorApplication.isPlaying = false;  //hide for build
             Application.Quit();
         }
 
@@ -152,7 +152,7 @@ public class GameController : MonoBehaviour {
 
                 float distance = Vector3.Distance(spot, target.position);
 
-                if (distance > 7f)
+                if (distance > 9f)
                 {
                     var ghostX = (GameObject) Instantiate(ghostPrefab, spot, transform.rotation);
                 }
