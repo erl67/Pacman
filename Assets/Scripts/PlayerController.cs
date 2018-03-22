@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour {
         agent = gameObject.GetComponent<NavMeshAgent>();
         rb = gameObject.GetComponent<Rigidbody>();
         player = GameObject.Find("Pacman").gameObject;
-        agent.Warp(player.transform.position);
 
         txtLives.text = "Lives: " + lives;
         txtScore.text = "Score: " + score;
@@ -39,43 +38,37 @@ public class PlayerController : MonoBehaviour {
 
         yield return new WaitForSecondsRealtime(2);
         mazeInstance = GameObject.Find("mazeInstance").GetComponent<Maze>();
+
+        AgentOn();
     }
 
     void Update () {
 
-
-        //if (Input.GetMouseButtonDown(0) && agent.isActiveAndEnabled)
-        //{
-        //    if (Physics.Raycast(mouseClick, out hit, 1000))
-        //    {
-        //        agent.destination = hit.point;
-        //        //transform.LookAt(hit.point);
-        //        Debug.Log("Pacman moving to " + agent.destination);
-        //    }
-        //}
         if (Input.GetMouseButton(0) && agent.isActiveAndEnabled)
         {
-            agent.ResetPath();
             mouseClick = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(mouseClick, out hit, 1000))
+            if (Physics.Raycast(mouseClick, out hit, 2000))
             {
+                rb.isKinematic = true;
+
                 cursorPosition = hit.point;
-                NavMesh.SamplePosition(cursorPosition, out navHitPosition, .5f, 1 << NavMesh.GetAreaFromName("Walkable"));
+                NavMesh.SamplePosition(cursorPosition, out navHitPosition, 15f, 1 << NavMesh.GetAreaFromName("Walkable"));
                 agent.SetDestination(navHitPosition.position);
                 Debug.Log("Pacman moving to " + agent.destination);
             }
           
         }
-        else if (timer < Time.time)
-        {
-            //agent.destination = gameObject.transform.position;
-            //agent.ResetPath();
-            //rb.velocity = Vector3.zero;
-            //timer = Time.time + 5f;
-            //Debug.Log("Pacman reset");
-            //agent.enabled = false;
-        }
+
+        //if (timer < Time.time && agent.isActiveAndEnabled)
+        //{
+        //    //rb.angularVelocity = Vector3.zero;
+        //    //rb.freezeRotation = true;
+        //    //rb.velocity = Vector3.zero;
+        //    timer = Time.time + 15f;
+        //    Debug.Log("Pacman reset");
+        //    AgentOn();
+        //}
 
         if (Input.GetMouseButtonDown(1))
         {
@@ -106,28 +99,27 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.B) && agent.isActiveAndEnabled)
         {
             agent.enabled = false;
+            rb.isKinematic = false;
             rb.AddForce(new Vector3(Random.Range(-3f, 3f), 6f, Random.Range(-3f, 3f)) * 5f, ForceMode.Impulse);
             Invoke("AgentOn", 3);
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
-            agent.enabled = true;
+            AgentOn();
         }
     }
 
     private void AgentOn()
     {
         agent.enabled = true;
+        rb.isKinematic = true;
+        agent.Warp(player.transform.position);
+        agent.ResetPath();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("PC " + other.tag + " " + other.transform.position + " @ " + gameObject.transform.position);
-
-        if (other.tag.Equals("mazewall"))
-        {
-            agent.destination = Vector3.zero;
-        }
 
         if (other.tag.Equals("dot"))
         {
@@ -204,9 +196,7 @@ public class PlayerController : MonoBehaviour {
 
         Time.timeScale = 1;
         player.transform.position = new Vector3(0f, 0f, 0f);
-        agent.ResetPath();
-        //agent.Warp(player.transform.position);
-        //agent.destination = Vector3.zero;
+        AgentOn();
     }
 
 }

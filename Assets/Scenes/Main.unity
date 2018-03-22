@@ -98,15 +98,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.3
+    agentRadius: 0.25
     agentHeight: 1
-    agentSlope: 6.8
-    agentClimb: 0.1
+    agentSlope: 8
+    agentClimb: 0.2
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 0.5
     manualCellSize: 0
-    cellSize: 0.1
+    cellSize: 0.083333336
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -158,18 +158,18 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.15
-  m_Speed: 30
-  m_Acceleration: 10
-  avoidancePriority: 75
-  m_AngularSpeed: 135
+  m_Speed: 20
+  m_Acceleration: 30
+  avoidancePriority: 85
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 0
-  m_AutoBraking: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 1
-  m_ObstacleAvoidanceType: 1
+  m_ObstacleAvoidanceType: 3
 --- !u!82 &120799380
 AudioSource:
   m_ObjectHideFlags: 0
@@ -293,7 +293,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.3
+  m_Radius: 0.2
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -1097,8 +1097,8 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "Instructions:\nClick Mouse to Move\nCamera:\n\t-WASD = rotate\n\t-MouseWheel
     = zoom\n\t-MiddleMouse = reset view\n\t-O/L/I = toggle overhead/spot/both lights\n\nT/G/F/H
-    to move manually\nB - Jump in random direction\nRight Mouse - sacrifice life\nQ
-    - Quit\nP - Pause\nBackspace- Restart"
+    to move manually\nB - Jump in random direction\nV - Reset NavAgent if stuck\nRight
+    Mouse - sacrifice life\nQ - Quit\nP - Pause\nBackspace- Restart"
 --- !u!222 &1101832661
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1685,13 +1685,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 386df1615c74b2341bf580a9b4936615, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.3
+  m_Volume: 0.68
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 215
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

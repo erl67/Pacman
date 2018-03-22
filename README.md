@@ -6,7 +6,7 @@ Made in Unity 3D
 
 Eat the pills and avoid the ghosts.
 You start with 3 lives and lose one life if a ghost catches you.
-Ghosts will spawn and die eventually if they run out of energy.
+Ghosts will die eventually if they run out of energy, and new ones will spawn to replace them.
 
 
 ## Controls:
@@ -17,7 +17,7 @@ Movement(alt) - TFGH
 
 B - Jump randomly
 
-V - Reenable NavAgent (for safety, shouldn't be necessary)
+V - Reset NavAgent, useful if stuck
 
 Camera Rotate - WASD or Arrow Keys
 
@@ -25,7 +25,7 @@ Camera Zoom - MouseWheel
 
 Camera Reset - Middle Button
 
-Lights - O/L to toggle overhead and spotlight, I to toggle both
+Lights - O/L to toggle overhead/spotlight, I to toggle both
 
 P – Pause
 
