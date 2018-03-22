@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour {
     private Transform target;
     private NavMeshAgent agent;
     private RaycastHit hit;
+    private Ray mouseClick;
+    private NavMeshHit navHitPosition;
+    private Vector3 cursorPosition;
     private float timer = 1f;
 
     public GameObject player;
@@ -34,38 +37,43 @@ public class PlayerController : MonoBehaviour {
         loseLife = sounds[1];
         endSound = GameObject.Find("GameOver").gameObject.GetComponent<AudioSource>();
 
-
-        yield return new WaitForSecondsRealtime(3);
+        yield return new WaitForSecondsRealtime(2);
         mazeInstance = GameObject.Find("mazeInstance").GetComponent<Maze>();
     }
 
     void Update () {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ////transform.position = transform.position + new Vector3(1f, 0f, 2f);
-            rb.AddForce(new Vector3(1f, 50f, 0f), ForceMode.Impulse);
-            rb.AddForce(new Vector3(1f, 50f, 0f));
 
-            Debug.Log("Pacman " + gameObject.transform.position.ToString());
-        }
 
-        //agent.enabled = true;
-        if (Input.GetMouseButtonDown(0))
+        //if (Input.GetMouseButtonDown(0) && agent.isActiveAndEnabled)
+        //{
+        //    if (Physics.Raycast(mouseClick, out hit, 1000))
+        //    {
+        //        agent.destination = hit.point;
+        //        //transform.LookAt(hit.point);
+        //        Debug.Log("Pacman moving to " + agent.destination);
+        //    }
+        //}
+        if (Input.GetMouseButton(0) && agent.isActiveAndEnabled)
         {
-            
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+            agent.ResetPath();
+            mouseClick = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(mouseClick, out hit, 1000))
             {
-                agent.destination = hit.point;
+                cursorPosition = hit.point;
+                NavMesh.SamplePosition(cursorPosition, out navHitPosition, .5f, 1 << NavMesh.GetAreaFromName("Walkable"));
+                agent.SetDestination(navHitPosition.position);
                 Debug.Log("Pacman moving to " + agent.destination);
             }
+          
         }
         else if (timer < Time.time)
         {
             //agent.destination = gameObject.transform.position;
-            agent.ResetPath();
-            rb.velocity = Vector3.zero;
-            timer = Time.time + 1f;
-            Debug.Log("Pacman reset");
+            //agent.ResetPath();
+            //rb.velocity = Vector3.zero;
+            //timer = Time.time + 5f;
+            //Debug.Log("Pacman reset");
             //agent.enabled = false;
         }
 
@@ -73,34 +81,43 @@ public class PlayerController : MonoBehaviour {
         {
             LoseLife();
         }
+
+        if (Input.GetKeyDown(KeyCode.T) && agent.isActiveAndEnabled)
+        {
+            rb.velocity = Vector3.zero;
+            agent.destination = transform.position + new Vector3(0f, 0f, 2f);
+        }
+        if (Input.GetKeyDown(KeyCode.G) && agent.isActiveAndEnabled)
+        {
+            rb.velocity = Vector3.zero;
+            agent.destination = transform.position + new Vector3(0f, 0f, -2f);
+        }
+        if (Input.GetKeyDown(KeyCode.F) && agent.isActiveAndEnabled)
+        {
+            rb.velocity = Vector3.zero;
+            agent.destination = transform.position + new Vector3(-2f, 0f, 0f);
+        }
+        if (Input.GetKeyDown(KeyCode.H) && agent.isActiveAndEnabled)
+        {
+            rb.velocity = Vector3.zero;
+            agent.destination = transform.position + new Vector3(2f, 0f, 0f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.B) && agent.isActiveAndEnabled)
+        {
+            agent.enabled = false;
+            rb.AddForce(new Vector3(Random.Range(-3f, 3f), 6f, Random.Range(-3f, 3f)) * 5f, ForceMode.Impulse);
+            Invoke("AgentOn", 3);
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            agent.enabled = true;
+        }
     }
 
-    private void LateUpdate()
+    private void AgentOn()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            //agent.destination = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            rb.AddForce(new Vector3(0f, 0f, 500f));
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            //agent.destination = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            rb.AddForce(new Vector3(0f, 0f, -500f));
-        }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            //agent.destination = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            rb.AddForce(new Vector3(-500f, 0f, 0f));
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            //agent.destination = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            rb.AddForce(new Vector3(500f, 0f, 0f));
-        }
+        agent.enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -132,7 +149,7 @@ public class PlayerController : MonoBehaviour {
         txtLives.text = "Lives: " + lives;
 
         if (lives < 1) { endSound.Play(); }
-        else { loseLife.Play(); };
+        else { loseLife.Play(); }
 
         Time.timeScale = 0;
 
@@ -162,6 +179,7 @@ public class PlayerController : MonoBehaviour {
             txtCenter.text = "\nYou got eaten by a ghost.\nPress (r or space) to continue";
             NewLife();
         }
+
     }
 
     public void NewLife()
@@ -180,12 +198,15 @@ public class PlayerController : MonoBehaviour {
             yield return null;
         }
         txtCenter.text = "";
-        GameController.instance.MakeGhosts();
+
         mazeInstance.ToggleMaze();
+        GameController.instance.MakeGhosts();
 
         Time.timeScale = 1;
-        player.transform.position = new Vector3(0f, -.75f, 0f);
-        agent.Warp(player.transform.position);
+        player.transform.position = new Vector3(0f, 0f, 0f);
+        agent.ResetPath();
+        //agent.Warp(player.transform.position);
+        //agent.destination = Vector3.zero;
     }
 
 }

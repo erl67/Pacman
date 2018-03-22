@@ -141,11 +141,11 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 120799377}
   serializedVersion: 2
-  m_Mass: 100
-  m_Drag: 50
+  m_Mass: 1
+  m_Drag: 5
   m_AngularDrag: 0
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -158,7 +158,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.15
-  m_Speed: 5
+  m_Speed: 30
   m_Acceleration: 10
   avoidancePriority: 75
   m_AngularSpeed: 135
@@ -1097,7 +1097,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "Instructions:\nClick Mouse to Move\nCamera:\n\t-WASD = rotate\n\t-MouseWheel
     = zoom\n\t-MiddleMouse = reset view\n\t-O/L/I = toggle overhead/spot/both lights\n\nT/G/F/H
-    to move manually\nSpace - Jump in random direction\nRight Mouse - sacrifice life\nQ
+    to move manually\nB - Jump in random direction\nRight Mouse - sacrifice life\nQ
     - Quit\nP - Pause\nBackspace- Restart"
 --- !u!222 &1101832661
 CanvasRenderer:
@@ -1652,7 +1652,7 @@ MonoBehaviour:
   gameOver: 0
   spawnGhost: 0
   deletedot: 0
-  ghostPrefab: {fileID: 1013557372411078, guid: 873c0d160198fbe47819d581294977f6,
+  ghostPrefab: {fileID: 1163613119136996, guid: 10290bd1d7ea37140b6642b7e42e9537,
     type: 2}
   ghostCount: 0
   dots: []
@@ -1850,62 +1850,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1718425685}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &1860290188
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 19
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 19
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4825996443586556, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 114018261734877764, guid: d2d9022239e572b46b91234eb612833b,
-        type: 2}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 120799382}
-    - target: {fileID: 114018261734877764, guid: d2d9022239e572b46b91234eb612833b,
-        type: 2}
-      propertyPath: ghostDie
-      value: 
-      objectReference: {fileID: 612343824}
-    - target: {fileID: 1478404697422438, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-      propertyPath: m_Name
-      value: Ghost
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: d2d9022239e572b46b91234eb612833b, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &2099169880
 GameObject:
   m_ObjectHideFlags: 0

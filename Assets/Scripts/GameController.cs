@@ -11,7 +11,6 @@ public class GameController : MonoBehaviour {
 
     public GameObject ghostPrefab;
     public int ghostCount;
-    private GameObject ghost1, ghost2, ghost3, ghost4, ghostX;
 
     public GameObject[] dots, walls, ghosts;
 
@@ -79,10 +78,11 @@ public class GameController : MonoBehaviour {
 
     public void MakeGhosts()
     {
-        ghost1 = Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
-        ghost2 = Instantiate(ghostPrefab, new Vector3(18f, 0, -18f), transform.rotation);
-        ghost3 = Instantiate(ghostPrefab, new Vector3(-18f, 0, 18f), transform.rotation);
-        ghost4 = Instantiate(ghostPrefab, new Vector3(-18f, 0, -18f), transform.rotation);
+        Debug.Log("Making ghosts");
+        var ghost1 = (GameObject) Instantiate(ghostPrefab, new Vector3(18f, 0, 18f), transform.rotation);
+        var ghost2 = (GameObject) Instantiate(ghostPrefab, new Vector3(18f, 0, -18f), transform.rotation);
+        var ghost3 = (GameObject) Instantiate(ghostPrefab, new Vector3(-18f, 0, 18f), transform.rotation);
+        var ghost4 = (GameObject) Instantiate(ghostPrefab, new Vector3(-18f, 0, -18f), transform.rotation);
     }
 
     public IEnumerator StartBox()
@@ -99,21 +99,19 @@ public class GameController : MonoBehaviour {
         GameObject.Find("Pacman").transform.position = new Vector3(0f, 0f, 0f);
     }
 
-
     void Update () {
-
+        
         if (GameController.instance.gameOver)
         {
             PlayerDead();
         }
 
-        if ((gameOver && Input.GetKeyDown(KeyCode.R)) || Input.GetKeyDown(KeyCode.Backspace))
+        if (gameOver && Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GameObject.Find("OverheadLight").gameObject.GetComponent<Light>().enabled = false;
             GameObject.Find("Spotlight").gameObject.GetComponent<Light>().enabled = true;
         }
-
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -130,18 +128,9 @@ public class GameController : MonoBehaviour {
             AudioListener.volume = Time.timeScale == 0 ? 0f : volume; 
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            AudioListener.volume = AudioListener.volume * .9f;
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            AudioListener.volume = AudioListener.volume * 1.1f;
-        }
-
         if (Input.GetKeyDown(KeyCode.F1) || Input.GetKeyDown(KeyCode.U))
         {
+            GameObject.Find("Pacman").GetComponent<CapsuleCollider>().enabled = false;
         }
 
         if (timer < Time.time)
@@ -150,7 +139,7 @@ public class GameController : MonoBehaviour {
             spawnGhost = true;
         }
 
-        if (spawnGhost)
+        if (spawnGhost && Time.timeScale == 1)
         {
             ghostCount = GameObject.FindGameObjectsWithTag("ghost").Length;
             if (ghostCount < 10) {
@@ -165,7 +154,7 @@ public class GameController : MonoBehaviour {
 
                 if (distance > 7f)
                 {
-                    ghostX = Instantiate(ghostPrefab, spot, transform.rotation);
+                    var ghostX = (GameObject) Instantiate(ghostPrefab, spot, transform.rotation);
                 }
             }
             spawnGhost = false;

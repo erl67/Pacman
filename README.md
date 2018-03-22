@@ -2,17 +2,22 @@
 
 Made in Unity 3D
 
-# Background:
+## Background:
 
-Eat the pills and avoid the ghost.
+Eat the pills and avoid the ghosts.
 You start with 3 lives and lose one life if a ghost catches you.
+Ghosts will spawn and die eventually if they run out of energy.
 
 
-# Controls:
+## Controls:
 
 Movement – Mouse click to move player
 
 Movement(alt) - TFGH
+
+B - Jump randomly
+
+V - Reenable NavAgent (for safety, shouldn't be necessary)
 
 Camera Rotate - WASD or Arrow Keys
 
@@ -28,6 +33,6 @@ Q – Quit
 
 Right Mouse – self-destruct and lose a life
 
-R – reset
+R/Backspace – reset
 
 U - easy mode (noclip)
